@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Registration</title>
+</head>
+<body>
+<h2>Student Registration Form</h2>
+
+<form id="studentForm">
+    Name:
+    <input type="text" id="name" required><br><br>
+
+    Age:
+    <input type="number" id="age" required><br><br>
+
+    Course:
+    <input type="text" id="course" required><br><br>
+
+    Email:
+    <input type="email" id="email" required><br><br>
+
+    <button type="submit">Register</button>
+</form>
+
+<h2>Registered Students</h2>
+<script>
+    // JSON array to store multiple students
+    let studentData = [];
+
+    document.getElementById("studentForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        // Store student details as a JavaScript object
+        let student = {
+            name: document.getElementById("name").value,
+            age: document.getElementById("age").value,
+            course: document.getElementById("course").value,
+            email: document.getElementById("email").value
+        };
+        // Convert object into JSON
+        let studentJSON = JSON.stringify(student);
+        // Add JSON data to JSON array
+        studentData.push(studentJSON);
+
+        alert("Student registered successfully!");
+
+        document.getElementById("studentForm").reset();
+    });
+
+    // Simulate retrieving registered students using setTimeout()
+    function getStudents() {
+        return new Promise(function(resolve) {
+            setTimeout(function() {
+                resolve(studentData);
+            }, 1000);
+        });
+    }
+
+    // Process the Promise using .then()
+    function displayStudents() {
+        getStudents()
+            .then(function(data) {
+
+                let output = "";
+
+                // Parse JSON data and display students
+                data.forEach(function(studentJSON) {
+                    let student = JSON.parse(studentJSON);
+
+                    output += `
+                        <p>
+                            <b>Name:</b> ${student.name}<br>
+                            <b>Age:</b> ${student.age}<br>
+                            <b>Course:</b> ${student.course}<br>
+                            <b>Email:</b> ${student.email}
+                        </p>
+                        <hr>
+                    `;
+                });
+
+                document.getElementById("students").innerHTML = output;
+            });
+    }
+
+    // Display registered students every 2 seconds
+    setInterval(displayStudents, 2000);
+</script>
+
+</body>
+</html>
